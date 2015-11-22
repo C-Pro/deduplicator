@@ -43,13 +43,15 @@ class Db(object):
             if mindate:
                 maxdate = mindate + chunk_interval
             log.debug('Executing SQL query (iptable)')
-            log.debug('Mindate={}'.format(mindate))
+            log.debug('Mindate={}, Maxdate={}'
+                      .format(mindate, maxdate))
             cur.execute(sql, (mindate, maxdate))
             chunk = cur.fetchall()
             log.debug('SQL Query finished')
             if len(chunk) == 0:
                 # we should check if there is more data
                 # outside our time interval
+                log.debug('No data in interval. Seeking...')
                 cur.execute('''select min("date")
                                from iptable
                                where "date" >= %s
@@ -59,6 +61,7 @@ class Db(object):
                 # so no KeyError here
                 mindate = cur.fetchone()[0]
                 if mindate:
+                    log.debug('Found data at {}'.format(mindate))
                     continue
                 else:
                     break

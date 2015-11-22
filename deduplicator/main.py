@@ -137,7 +137,9 @@ if __name__ == '__main__':
     print("Server is ready to accept requests.\nPress Ctrl+C to exit.")
     try:
         DupServer.is_dup = are_users_duplicate
-        httpd = HTTPServer(('localhost', 8000), DupServer)
+        httpd = HTTPServer((settings['host'],
+                            int(settings['port'])),
+                           DupServer)
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("Bye!")

@@ -1,3 +1,5 @@
+begin;
+
 --Many matching IPS, but no matching users
 insert into iptable(user_id, ip_address)
 select r.r + 10^4 as user_id,
@@ -47,4 +49,5 @@ select user_id,
        ip_address2
 from source;
 
+commit;
 

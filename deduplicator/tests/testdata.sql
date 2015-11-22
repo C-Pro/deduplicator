@@ -4,7 +4,7 @@ create database db with owner scott;
 
 create table iptable (user_id bigint,
                       ip_address varchar(15),
-                      "date" timestamp);
+                      "date" timestamp default clock_timestamp());
 
 /*
 Tests

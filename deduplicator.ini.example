@@ -1,2 +1,4 @@
 [deduplicator]
+host=localhost
+port=8000
 connect_string=dbname=db host=127.0.0.1 port=5432 user=scott password=tiger
