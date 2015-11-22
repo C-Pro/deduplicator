@@ -4,11 +4,11 @@ python:
 install:
   - python setup.py install
 before_script:
-  - psql -U postgres -f duplicates/tests/testdata.sql
-  - cp duplicates.ini.example duplicates.ini
-  - python duplicates/main.py
+  - psql -U postgres -f deduplicator/tests/testdata.sql
+  - cp deduplicator.ini.example deduplicator.ini
+  - python deduplicator/main.py
   - sleep 100
-  - psql -U postgres -d db -f duplicates/tests/testdata_many_dupes.sql
+  - psql -U postgres -d db -f deduplicator/tests/testdata_many_dupes.sql
   - sleep 120
 script:
   - nosetests
