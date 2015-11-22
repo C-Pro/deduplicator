@@ -1,0 +1,14 @@
+language: python
+python:
+  - "3.4"
+install:
+  - python setup.py install
+before_script:
+  - psql -U postgres -f duplicates/tests/testdata.sql
+  - cp duplicates.ini.example duplicates.ini
+  - python duplicates/main.py
+  - sleep 100
+  - psql -U postgres -d db -f duplicates/tests/testdata_many_dupes.sql
+  - sleep 120
+script:
+  - nosetests
