@@ -58,3 +58,5 @@ alter table iptable add constraint iptable_uk unique (user_id, ip_address);
 --Index for fast extraction of new data
 create index iptable_date_i on iptable("date");
 
+alter table iptable owner to scott;
+
