@@ -1,6 +1,7 @@
 import psycopg2
 import marshal
 import logging
+import datetime
 
 log = None
 
@@ -35,13 +36,13 @@ class Db(object):
         calls callback for each chunk of data'''
         cur = self.conn.cursor()
         sql = '''select user_id,
-                        ip_address
+                        ip_address,
+                        max("date") over ()
                 from iptable
                 where "date" >= %s
                 and "date" < %s'''
         while True:
-            if mindate:
-                maxdate = mindate + chunk_interval
+            maxdate = mindate + chunk_interval
             log.debug('Executing SQL query (iptable)')
             log.debug('Mindate={}, Maxdate={}'
                       .format(mindate, maxdate))
@@ -54,19 +55,20 @@ class Db(object):
                 log.debug('No data in interval. Seeking...')
                 cur.execute('''select min("date")
                                from iptable
-                               where "date" >= %s
+                               where "date" > %s
                             ''', (maxdate,)
                             )
                 # min() always returns value,
                 # so no KeyError here
-                mindate = cur.fetchone()[0]
-                if mindate:
+                new_mindate = cur.fetchone()[0]
+                if new_mindate:
+                    mindate = new_mindate
                     log.debug('Found data at {}'.format(mindate))
                     continue
                 else:
                     break
             callback(chunk)
-            mindate = maxdate
+            mindate = chunk[0][2] + datetime.timedelta(seconds=1)
         cur.close()
         # converting to timestamp to avoid serialization error
-        return (maxdate - 2*chunk_interval).timestamp()
+        return mindate.timestamp()
