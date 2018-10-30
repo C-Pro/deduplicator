@@ -7,7 +7,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'psycopg2==2.5.4',
+        'psycopg2==2.7.5',
         'requests==2.20.0'
     ],
     author = "Sergey Melekhin",
