@@ -57,3 +57,4 @@ target/
 .pydevproject
 deduplicator.ini
 *.*~
+.eggs
